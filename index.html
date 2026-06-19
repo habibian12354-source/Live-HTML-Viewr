@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate HTML Live Viewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0f1a;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        header {
+            background: #1a1a2e;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #333;
+        }
+        h1 {
+            font-size: 1.2rem;
+            color: #00ffcc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-container {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            background: #00ffcc;
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #ff007f;
+            color: #fff;
+            box-shadow: 0 0 10px #ff007f;
+        }
+        #clear-btn {
+            background: #ff4757;
+            color: #fff;
+        }
+        #clear-btn:hover {
+            background: #ff6b81;
+            box-shadow: 0 0 10px #ff4757;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 60px);
+        }
+        .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .panel-title {
+            background: #16162a;
+            padding: 5px 15px;
+            font-size: 0.85rem;
+            color: #888;
+            border-bottom: 1px solid #222;
+            text-transform: uppercase;
+        }
+        textarea {
+            width: 100%;
+            flex: 1;
+            background: #121224;
+            color: #00ff66;
+            border: none;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            resize: none;
+            outline: none;
+            line-height: 1.5;
+        }
+        iframe {
+            width: 100%;
+            flex: 1;
+            background: #fff;
+            border: none;
+        }
+        .divider {
+            width: 4px;
+            background: #222;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .divider {
+                height: 4px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>⚡ Live HTML Viewer</h1>
+        <div class="btn-container">
+            <button id="load-demo-btn">Load Demo Code</button>
+            <button id="clear-btn">Clear</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="panel">
+            <div class="panel-title">Paste or Write HTML Code Here</div>
+            <textarea id="html-code" placeholder="<h1>Type your HTML here...</h1>"></textarea>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="panel">
+            <div class="panel-title">Live Output</div>
+            <iframe id="output-view" src="about:blank"></iframe>
+        </div>
+    </div>
+
+    <script>
+        const htmlInput = document.getElementById('html-code');
+        const iframe = document.getElementById('output-view');
+        const loadDemoBtn = document.getElementById('load-demo-btn');
+        const clearBtn = document.getElementById('clear-btn');
+
+        // Bulletproof update method using srcdoc
+        function updateViewer() {
+            const code = htmlInput.value;
+            iframe.srcdoc = code; 
+        }
+
+        htmlInput.addEventListener('input', updateViewer);
+
+        clearBtn.addEventListener('click', () => {
+            htmlInput.value = '';
+            updateViewer();
+        });
+
+        loadDemoBtn.addEventListener('click', () => {
+            const demoCode = `<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { 
+            background: linear-gradient(45deg, #ff007f, #7f00ff); 
+            height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-family: sans-serif;
+            margin: 0;
+        }
+        h1 { 
+            color: white; 
+            font-size: 2.5rem; 
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: bounce 1s infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <h1>🎉 Working Perfectly! 🎉</h1>
+</body>
+</html>`;
+            
+            htmlInput.value = demoCode;
+            updateViewer();
+        });
+
+        // Default initial code
+        htmlInput.value = "<h1>Hello World!</h1>\n<p>Type something to see the magic.</p>";
+        updateViewer();
+    </script>
+</body>
+</html>
